@@ -106,21 +106,21 @@
 <p>解决方法：在虚拟机设置—-&gt;网络适配器—-&gt;自定义—-&gt;桥接模式（桥接模式需要手工配置IP地址，下文会涉及到IP地址配置）</p>
 </li>
 </ol>
-<p>·配置方法1<br>编辑—-&gt;虚拟网络编辑器—-&gt;桥接至无线网卡（选择你自己的无线网卡）</p>
-<p>·配置方法2<br>虚拟网络编辑器—-&gt;还原默认设置—-&gt;重启虚拟机</p>
-<p>·配置方法3<br>以太网（以太网就是我们物理电脑连接的网络，可以是宽带，也可以是无线网络）<br>主要是把“以太网”网络 Internet协议版本4（TCP/IPV4）属性设置为自动获得（自动获得IP地址和自动获得DNS地址）</p>
+<p>· 配置方法1<br>编辑—-&gt;虚拟网络编辑器—-&gt;桥接至无线网卡（选择你自己的无线网卡）</p>
+<p>· 配置方法2<br>虚拟网络编辑器—-&gt;还原默认设置—-&gt;重启虚拟机</p>
+<p>· 配置方法3<br>以太网（以太网就是我们物理电脑连接的网络，可以是宽带，也可以是无线网络）<br>主要是把“以太网”网络 Internet协议版本4（TCP/IPV4）属性设置为自动获得（自动获得IP地址和自动获得DNS地址）</p>
 <p>2.NAT模式（推荐）<br>  此模式下，虚拟机可以上网，但是，与物理机的网络有所不同，简单理解就是，虚拟机可以访问网络，但通过它访问的网络无法访问虚拟机 。（类比，内网访问外网，外网不能访问内网）</p>
 <p>  此时我们打开虚拟网络编辑器<br>  单击“VMnet8”→“NAT设置”，记住子网IP、子网掩码、网关</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 打开虚拟机，输入指令</span><br><span class="line">vi /etc/sysconfig/network-scripts/ifcfg-eth0</span><br><span class="line"># 添加</span><br><span class="line">        IPADDR=子网IP</span><br><span class="line">	    NETMASK=子网掩码</span><br><span class="line">	    GATEWAY=网关IP</span><br><span class="line">	    DNS1=144.144.144.144</span><br><span class="line">	    DNS2=8.8.8.8</span><br><span class="line"># 重启网络连接</span><br><span class="line">service network restart</span><br></pre></td></tr></table></figure>
 <p>3.仅主机<br>  虚拟机只能跟物理机通信，无法上网</p>
 <h1 id="二-系统类"><a href="#二-系统类" class="headerlink" title="二.系统类"></a>二.系统类</h1><p>1.DHCP服务协议<br>  任务管理器—&gt;服务—&gt;检查DHCP服务是否打开（安装虚拟机选择nat模式，不然有概率DPHC服务会报错）<br>  如图<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/q83TED"><img src="https://s1.ax1x.com/2022/03/24/q83TED.png" alt="网络1.png"></a><br>2.网络适配器<br>  控制面板—&gt;打开控制面板—-&gt;网络和Internet—&gt;网络共享中心—&gt;更改适配器设置,检查VMware是否被禁用<br>  如图<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/q837Ue"><img src="https://s1.ax1x.com/2022/03/24/q837Ue.jpg" alt="网络2.jpg"></a></p>
-<h1 id="三-配置文件类"><a href="#三-配置文件类" class="headerlink" title="三.配置文件类"></a>三.配置文件类</h1><p>·dns配置文件1</p>
+<h1 id="三-配置文件类"><a href="#三-配置文件类" class="headerlink" title="三.配置文件类"></a>三.配置文件类</h1><p>· dns配置文件1</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 编辑网络</span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-ens33</span><br><span class="line"># 在最下添加下面二行</span><br><span class="line">DNS1=202.103.24.68</span><br><span class="line">DNS2=202.103.44.150</span><br><span class="line"># 重启网络</span><br><span class="line">systemctl restart network.service</span><br><span class="line"># 配置完成建议重启虚拟机</span><br></pre></td></tr></table></figure>
 <p>修改提示:在linux系统内修改配置文件时<br> i 进入编辑,  esc退出编辑模式,  :wq! 保存退出，:q! 不保存退出(需要root权限)</p>
-<p>·dns配置文件2</p>
+<p>· dns配置文件2</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 将dns调整为公用dns </span><br><span class="line"># 打开配置文件</span><br><span class="line">vi/etc/resolv.conf</span><br><span class="line"># 直接添加dns</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line"># 同样也需要重启</span><br></pre></td></tr></table></figure>
 <p>提示:第二类dns配置文件可以解决<br>能解析baidu.com,但无法ping通baidu.com的问题</p>
-<p>·dns配置文件3</p>
+<p>· dns配置文件3</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 配置dns</span><br><span class="line">cd /etc</span><br><span class="line">vim resolv.conf</span><br><span class="line"># 添加一个本机可以使用的dns</span><br><span class="line">nameserver 192.168.190.3</span><br></pre></td></tr></table></figure>
 
 
